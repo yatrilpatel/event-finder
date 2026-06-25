@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Events - Event Finder</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+
+<body>
+<nav class="navbar navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/">❤️ Event Finder</a>
+
+        <div>
+            <a href="/about" class="btn btn-outline-light me-2">About</a>
+            <a th:if="${session.loggedInUser != null}"
+               href="/logout" class="btn btn-danger me-2">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="alert alert-success" th:if="${username != null}">
+    Welcome, <strong th:text="${username}">User</strong>! You are logged in
+</div>
+
+<div class="container mt-4">
+
+    <h3>Upcoming Events in Ahmedabad 🏙️ </h3>
+    <p class="text-muted">Find your next sport event and join the fun!</p>
+
+<form method="get" action="/events" class="mb-4">
+    <div class="row g-2 align-items-center">
+        <div class="col-auto">
+            <label for="sportFilter" class="col-form-label fw-bold">Filter by Sport:</label>
+        </div>
+
+        <div class="col-auto">
+            <select name="sport" id="sportFilter" class="form-select">
+                <option value="">All Sports</option>
+                <option value="Cricket" th:selected="${selectedSport == 'Cricket'}">🏏 Cricket</option>
+                <option value="Badminton" th:selected="${selectedSport == 'Badminton'}">🏸 Badminton</option>
+                <option value="Cycling" th:selected="${selectedSport == 'Cycling'}">🚴 Cycling</option>
+                <option value="Walking" th:selected="${selectedSport == 'Walking'}">🚶 Walking</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a href="/events" class="btn btn-outline-secondary ms-1">Clear</a>
+        </div>
+    </div>
+</form>
+
+
+    <div th:if="${#lists.isEmpty(events)}" class="alert alert-warning">
+        No events found. Please add some events to the database!
+    </div>
+
+    <div class="row" th:unless="${#lists.isEmpty(events)}">
+
+        <div class="col-md-4 mb-4" th:each="event : ${events}">
+    <div class="card shadow-sm h-100">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${event.title}">Event Title</h5>
+            <span class="badge bg-primary mb-2" th:text="${event.sport}">Sport</span>
+            <p class="card-text">
+                <strong>Date:</strong>
+                <span th:text="${event.date}">Date</span><br>
+                <Strong>Venue:</Strong>
+                <span th:text="${event.venue}">Venue</span></br>
+                <Strong>City:</Strong>
+                <span th:text="${event.city}">City</span>
+            </p>
+        </div>
+    </div>
+    </div>
+
+
+</div>
+
+</body>
+</html>
